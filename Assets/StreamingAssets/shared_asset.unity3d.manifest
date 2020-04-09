@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 1885469145
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 76a068def8bb7e88ae091e70516aa84d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9e6ad29cbd2df8fbe1a15315db0e51ab
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/WFramework/Examples/Textures/Shared/ButtonClick.png
+- Assets/WFramework/Examples/Textures/Shared/ButtonNormal.png
+- Assets/WFramework/Examples/Textures/Shared/ButtonDisable.png
+- Assets/WFramework/Examples/Textures/Shared/SmallBaseMap.png
+Dependencies: []

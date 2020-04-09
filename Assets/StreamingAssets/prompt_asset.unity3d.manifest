@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 2060065857
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 23543577b89ca38064cf96154a36d9aa
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9e6ad29cbd2df8fbe1a15315db0e51ab
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/WFramework/Examples/Textures/Prompt/1.png
+Dependencies: []
