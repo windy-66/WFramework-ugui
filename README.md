@@ -10,10 +10,13 @@ unity3d 基于ugui的框架，类似于cocos2dx 场景与层的概念，万能ui
 scene (后续加) panel layer 加入切换特效
 
 结构： 
+
 LoginScene
+
      panel
      tip
  MainScene
+ 
      panel
      tip
      
