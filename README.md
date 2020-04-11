@@ -20,3 +20,22 @@ LoginScene
      panel
      tip
      
+     
+     
+     Resources模式
+    protected void SetMainSkinPath(string path)
+    {
+        this._isAssetbundleMode = false;
+        mainSkinPath = path;
+    }
+    assetbudnle 模式
+    protected void SetAssetBundleSkin(string abName, string assetName) 
+    {
+        this._isAssetbundleMode = true;
+        this.abName = abName;
+        this.assetName = assetName;
+    }
+    
+    SceneMgr.Instance.SwitchingScene(SceneType.LoginScene); 切换场景
+    PanelMgr.Instance.ShowPanel(PanelName.Test2Panel); 切换面板
+
