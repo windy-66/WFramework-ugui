@@ -29,11 +29,14 @@ public class LoginScene : SceneBase
     { 
         switch(target.gameObject.name)
         {
+            case "Btn_AssetBundle":
+                PanelMgr.Instance.ShowPanel(PanelName.Test2Panel);
+                break;
             case "Btn_Panel":
-                PanelMgr.GetInstance.ShowPanel(PanelName.TestPanel);
+                PanelMgr.Instance.ShowPanel(PanelName.TestPanel);
                 break;
             case "Btn_Main":
-                SceneMgr.GetInstance.SwitchingScene(SceneType.MainScene);
+                SceneMgr.Instance.SwitchingScene(SceneType.MainScene);
                 break;
         }
     }

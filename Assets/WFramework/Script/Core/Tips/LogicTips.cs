@@ -21,8 +21,8 @@ public class LogicTips : LogicBase
 
     public void AddTips(string content)
     {
-        GameObject tipsObj = ResourceMgr.GetInstance.CreateGameObject("PanelTips", true);
-        LayerMgr.GetInstance.SetLayer(tipsObj, LayerType.Tips);
+        GameObject tipsObj = ResourceMgr.Instance.CreateGameObject("PanelTips", true);
+        ViewMgr.Instance.SetLayer(tipsObj, LayerType.Tips);
         Vector3 originPos = Vector3.zero;
         if (LastTips != null)
         {

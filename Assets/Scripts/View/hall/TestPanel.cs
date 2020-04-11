@@ -28,7 +28,7 @@ public class TestPanel : PanelBase
                     Close();
                     break;
             case "Btn_Test":
-                PanelMgr.GetInstance.ShowPanel(PanelName.Test2Panel);
+                PanelMgr.Instance.ShowPanel(PanelName.Test2Panel);
                 break;
         }
     }

@@ -6,7 +6,8 @@ public class Test2Panel : PanelBase
 {
     protected override void OnInitSkinFront()
     {
-        this.SetMainSkinPath("Panel/Test2Panel");
+        // ("prompt", "PromptPanel")
+        this.SetAssetBundleSkin("prompt", "PromptPanel");
     }
 
     public override void Init()

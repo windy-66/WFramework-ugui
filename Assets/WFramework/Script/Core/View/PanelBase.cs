@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-public class PanelBase : ViewBase
+﻿public class PanelBase : ViewBase
 {
     protected bool _cache = false;
     /// <summary>
@@ -128,7 +125,7 @@ public class PanelBase : ViewBase
     /// </summary>
     protected virtual void Close()
     {
-        PanelMgr.GetInstance.HidePanel(type);
+        PanelMgr.Instance.HidePanel(type);
     }
 
     /// <summary>
@@ -136,7 +133,7 @@ public class PanelBase : ViewBase
     /// </summary>
     protected virtual void Close(PanelName panel)
     {
-        PanelMgr.GetInstance.HidePanel(panel);
+        PanelMgr.Instance.HidePanel(panel);
     }
 
     /// <summary>
@@ -144,7 +141,7 @@ public class PanelBase : ViewBase
     /// </summary>
     protected virtual void CloseImmediate()
     {
-        PanelMgr.GetInstance.DestroyPanel(type);
+        PanelMgr.Instance.DestroyPanel(type);
     }
 
     public virtual void OnHideFront()
@@ -165,5 +162,7 @@ public enum PanelName
 {
     none = 0,
     TestPanel,
-    Test2Panel
+    Test2Panel,
+    AssetbundlTestPanel, 
+    UpdatePanel
 }

@@ -9,24 +9,17 @@ using UnityEngine.UI;
 public class PanelMgr
 {
     #region 初始化
-    protected static PanelMgr mInstance;
-    public static bool hasInstance
+    protected static PanelMgr _instance; 
+ 
+    public static PanelMgr Instance
     {
         get
         {
-            return mInstance != null;
-        }
-    }
-
-    public static PanelMgr GetInstance
-    {
-        get
-        {
-            if (!hasInstance)
+            if (_instance == null)
             {
-                mInstance = new PanelMgr();
+                _instance = new PanelMgr();
             }
-            return mInstance;
+            return _instance;
         }
 
     }
@@ -133,8 +126,7 @@ public class PanelMgr
             current.gameObject.SetActive(false);
             current.OnInit(sceneArgs);
             current.OnShowing();
-            //  LayerMgr.GetInstance.SetLayer(current.gameObject, LayerType.Panel);
-            ViewMgr.GetInstance.SetLayer(current.gameObject, LayerType.Panel);
+            ViewMgr.Instance.SetLayer(current.gameObject, LayerType.Panel);
         }
         else
         {
@@ -343,7 +335,7 @@ public class PanelMgr
 
     private void MaskStyle(PanelBase go)
     {
-        Transform mask = ResourceMgr.GetInstance.CreateTransform("PanelMask", true);
+        Transform mask = ResourceMgr.Instance.CreateTransform("PanelMask", true);
         mask.GetComponent<RectTransform>().sizeDelta = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta;
         mask.GetComponent<ButtonEx>().onLeftClick = g => {
             HidePanel((PanelName)Enum.Parse(typeof(PanelName), mask.transform.parent.name));
@@ -368,8 +360,7 @@ public class PanelMgr
         mask.GetComponent<Image>().color = new Color(0, 0, 0, alpha);
         mask.SetParent ( go.gameObject.transform);
         mask.localPosition(Vector3.zero).localEulerAngles( Vector3.zero).localScale(1);
-       // LayerMgr.GetInstance.SetLayer(go.gameObject, LayerType.Panel);
-       ViewMgr.GetInstance.SetLayer(go.gameObject, LayerType.Panel);
+        ViewMgr.Instance.SetLayer(go.gameObject, LayerType.Panel);
     }
 
     #endregion
@@ -405,8 +396,8 @@ public class PanelMgr
             Debug.LogError("面板不存在");
             return;
         }
-        //  LayerMgr.GetInstance.SetPanelsLayer(panelsDethList);
-         ViewMgr.GetInstance.SetPanelsLayer(panelsDethList);
+        //  LayerMgr.Instance.SetPanelsLayer(panelsDethList);
+         ViewMgr.Instance.SetPanelsLayer(panelsDethList);
     }
 
 

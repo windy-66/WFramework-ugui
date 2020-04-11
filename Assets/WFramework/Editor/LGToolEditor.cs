@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class LGToolEditor : EditorWindow
 {
-    [MenuItem("LG_Tool/宏定义")]
+    [MenuItem("W_Tool/宏定义")]
     public static void Settings()
     {
         SettingWindows sw = GetWindow<SettingWindows>();//获取指定类型的窗口.
@@ -12,7 +12,7 @@ public class LGToolEditor : EditorWindow
         sw.Show();
     }
 
-    [MenuItem("LG_Tool/一键图片改精灵 %#F1")]
+    [MenuItem("W_Tool/一键图片改精灵 %#F1")]
     public static void EditTexture()
     {
         Transform[] SeleGameObj = Selection.transforms;
@@ -34,7 +34,7 @@ public class LGToolEditor : EditorWindow
         }
     }
 
-    [MenuItem("LG_Tool/一键更换字体 %#F2")]
+    [MenuItem("W_Tool/一键更换字体 %#F2")]
     public static void Open()
     {
         GetWindow(typeof(LGToolEditor));
@@ -85,7 +85,7 @@ public class LGToolEditor : EditorWindow
 
 
 
-    [MenuItem("LG_Tool/一键制作预制物 %#F3")]
+    [MenuItem("W_Tool/一键制作预制物 %#F3")]
     static void AddPrefabs()
     {
         GameObject[] SeleGameObj = Selection.gameObjects;
@@ -102,31 +102,8 @@ public class LGToolEditor : EditorWindow
         }
     }
 
-    [MenuItem("LG_Tool/一键空物体重置 %#F4")]
-    static void SetGameObject()
-    {
-        GameObject[] SeleGameObj = Selection.gameObjects;
-        foreach (GameObject item in SeleGameObj)
-        {
-            item.transform.localPosition = Vector3.zero;
-            item.transform.localEulerAngles = Vector3.zero;
-            item.transform.localScale = Vector3.one;
-        }
-    }
-    [MenuItem("LG_Tool/一键添加Box碰撞")]
-    static void AddBoxCollider()
-    {
-        GameObject[] SeleGameObj = Selection.gameObjects;
-        foreach (GameObject item in SeleGameObj)
-        {
-            if (item.GetComponent<BoxCollider>()==null)
-            {
-                item.AddComponent<BoxCollider>();
-                item.GetComponent<BoxCollider>().center = Vector3.zero;
-            }
-        }
-    }
-    [MenuItem("LG_Tool/生成子物体包围盒")]
+   
+    [MenuItem("W_Tool/生成子物体包围盒")]
     static void CreateChildObjBox()
     {
         GameObject[] SeleGameObj = Selection.gameObjects;
@@ -156,7 +133,7 @@ public class LGToolEditor : EditorWindow
         parent.rotation = rotation;
         parent.localScale = scale;
     }
-    [MenuItem("LG_Tool/一键设置物体Tag")]
+    [MenuItem("W_Tool/一键设置物体Tag")]
     static void SetGameObjTag()
     {
         GameObject[] SeleGameObj = Selection.gameObjects;

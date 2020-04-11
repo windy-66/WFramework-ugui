@@ -25,12 +25,9 @@ public class MainScene : SceneBase
     {
         switch (target.gameObject.name)
         {
-            case "Btn_Panel":
-                PanelMgr.GetInstance.ShowPanel(PanelName.TestPanel);
-                break;
+        
             case "Btn_login":
-                // PanelMgr.GetInstance.ShowPanel(PanelName.TestPanel);
-                SceneMgr.GetInstance.SwitchingScene(SceneType.LoginScene);
+                SceneMgr.Instance.SwitchingScene(SceneType.LoginScene);
                 break;
         }
     }

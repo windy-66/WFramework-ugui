@@ -389,7 +389,7 @@ namespace BlGame.Network
                 }
                 catch (Exception exc)
                 {
-                    Debugger.LogError(exc.ToString());
+                    Debug.LogError(exc.ToString());
                     Close();
                 }
 #endif
@@ -530,7 +530,7 @@ namespace BlGame.Network
                 }
                 catch (Exception ecp)
                 {
-                    Debugger.LogError("Handle Error msgid: " + type);
+                    Debug.LogError("Handle Error msgid: " + type);
                 }
 #endif
             }

@@ -36,4 +36,4 @@ ClassTypes:
 Assets:
 - Assets/WFramework/Examples/Builds/Message/MessagePanel.prefab
 Dependencies:
-- F:/C#/Qipai/client/Qipai/Assets/StreamingAssets/shared_asset.unity3d
+- F:/C#/Qipai/client/WFramework-ugui/Assets/StreamingAssets/shared_asset.unity3d

@@ -4,21 +4,21 @@ using UnityEngine;
 public class ResourceMgr : MonoBehaviour
 {
     #region 初始化
-    private static ResourceMgr mInstance;
+    private static ResourceMgr _instance;
 
     /// <summary>
     /// 获取资源加载实例
     /// </summary>
     /// <returns></returns>
-    public static ResourceMgr GetInstance
+    public static ResourceMgr Instance
     {
         get
         {
-            if (mInstance == null)
+            if (_instance == null)
             {
-                mInstance = new GameObject("_ResourceMgr").AddComponent<ResourceMgr>();
+                _instance = new GameObject("_ResourceMgr").AddComponent<ResourceMgr>();
             }
-            return mInstance;
+            return _instance;
         }
 
     }

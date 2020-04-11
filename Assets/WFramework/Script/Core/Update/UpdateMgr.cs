@@ -16,19 +16,17 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
     /// </summary>
     void Awake()
     {
-        Init();
     }
 
     /// <summary>
     /// 初始化
     /// </summary>
-    void Init()
+    public void Init()
     {
         DontDestroyOnLoad(gameObject);  //防止销毁自己
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         CheckExtractResource(); //释放资源
-      //  Application.targetFrameRate = AppConst.GameFrameRate;
     }
 
     /// <summary>
@@ -102,9 +100,7 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
                 Debug.Log(fileUrl);
                 message = "downloading>>" + fileUrl;
 
-                //todo
-              //  facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
-
+                CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, message), this);
 
                 /*
                 www = new WWW(fileUrl); yield return www;
@@ -123,9 +119,7 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
 
         message = "更新完成!!";
 
-        //todo
-        //facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
-
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_FINISH, message), this);
         OnResourceInited();
     }
 
@@ -134,20 +128,19 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
     /// </summary>
     public void OnResourceInited()
     {
-#if ASYNC_MODE
-            ResManager.Initialize(AppConst.AssetDir, delegate() {
-                Debug.Log("Initialize OK!!!");
-                this.OnInitialize();
-            });
-#else
-      //  ResManager.Initialize(); todo
-        this.OnInitialize();
-#endif
+        //AssetBundleSyncMgr.Instance.Initialize(AppConst.AssetDir, delegate ()
+        //{
+        //    Debug.Log("Initialize OK!!!");
+        //    this.OnInitialize();
+        //});
+        AssetBundleMgr.Instance.Initialize();
+        OnInitialize();
     }
 
     void OnInitialize()
     {
         initialize = true;
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_FINISH), this);
     }
     /// <summary>
     /// 线程下载
@@ -185,12 +178,10 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
     {
         return downloadFiles.Contains(file);
     }
-    void OnUpdateFailed(string file) 
+    void OnUpdateFailed(string file)
     {
         string message = "更新失败!>" + file;
-        
-        //todo
-      //  facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, message), this);
     }
     IEnumerator OnExtractResource()
     {
@@ -231,8 +222,8 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
 
             message = "正在解包文件:>" + fs[0];
             Debug.Log("正在解包文件:>" + infile);
-            ///todo
-          //  facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
+
+            CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, message), this);
 
             string dir = Path.GetDirectoryName(outfile);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
@@ -260,8 +251,8 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
         }
         message = "解包完成!!!";
 
-        // todo
-       // facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, message), this);
+
         yield return new WaitForSeconds(0.1f);
 
         message = string.Empty;

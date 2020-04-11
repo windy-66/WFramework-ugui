@@ -72,8 +72,7 @@ public class ThreadMgr : SingletonUnity<ThreadMgr>
     /// <param name="data"></param>
     private void OnSyncEvent(NotiData data)
     {
-        //todo
-        // facade.SendMessageCommand(data.evName, data.evParam); //通知View层
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, data), this);
         if (this.func != null) func(data);
     }
     // Update is called once per frame

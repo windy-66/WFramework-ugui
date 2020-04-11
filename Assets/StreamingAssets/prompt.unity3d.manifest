@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2948079193
+CRC: 2039260179
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3c86b07f0b37e46af0c6f2d5eb64f0bb
+    Hash: ff795aff4908e5bcdc9498d4d85bcfdf
   TypeTreeHash:
     serializedVersion: 2
     Hash: ca86a0f533e88c5083281d2ac9428b0d
@@ -45,5 +45,5 @@ Assets:
 - Assets/WFramework/Examples/Builds/Prompt/PromptItem.prefab
 - Assets/WFramework/Examples/Builds/Prompt/PromptPanel.prefab
 Dependencies:
-- F:/C#/Qipai/client/Qipai/Assets/StreamingAssets/prompt_asset.unity3d
-- F:/C#/Qipai/client/Qipai/Assets/StreamingAssets/shared_asset.unity3d
+- F:/C#/Qipai/client/WFramework-ugui/Assets/StreamingAssets/prompt_asset.unity3d
+- F:/C#/Qipai/client/WFramework-ugui/Assets/StreamingAssets/shared_asset.unity3d

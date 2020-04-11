@@ -1,32 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class SceneMgr
 {
 
     #region 初始化
-    protected static SceneMgr mInstance;
-    public static bool hasInstance
-    {
-        get
-        {
-            return mInstance != null;
-        }
-    }
+    protected static SceneMgr _instance;
+ 
 
-    public static SceneMgr GetInstance
+    public static SceneMgr Instance
     {
         get
         {
-            if (!hasInstance)
+            if (_instance == null )
             {
-                mInstance = new SceneMgr();
+                _instance = new SceneMgr();
             }
-            return mInstance;
+            return _instance;
         }
-
     }
 
     #endregion
@@ -121,6 +113,7 @@ public class SceneMgr
     {
         if (scenes.ContainsKey(sceneType))
         {
+            ViewMgr.Instance.SetScene(sceneType);
             currentScene = scenes[sceneType];
             currentScene.OnShowing();
             currentScene.OnResetArgs(sceneArgs);
@@ -140,8 +133,7 @@ public class SceneMgr
             currentScene.OnInit(sceneArgs);
             scenes.Add(currentScene.type, currentScene);
             currentScene.OnShowing();
-           // LayerMgr.GetInstance.SetLayer(currentScene.gameObject, LayerType.Scene);
-            ViewMgr.GetInstance.SetScene(currentScene.gameObject, sceneType);
+            ViewMgr.Instance.SetScene(currentScene.gameObject, sceneType);
             go.transform.localPosition(Vector3.zero).localRotation(Quaternion.identity).localScale(1);
             currentScene.OnShowed();
         }

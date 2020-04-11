@@ -92,5 +92,6 @@ public enum SceneType
 {
     None,
     MainScene, 
-    LoginScene, 
+    LoginScene,
+    UpdateScene
 }

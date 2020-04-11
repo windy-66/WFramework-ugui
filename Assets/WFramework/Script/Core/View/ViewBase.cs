@@ -15,6 +15,19 @@ public class ViewBase : MonoBehaviour
     /// </summary>
     private string mainSkinPath;
 
+    private string abName;
+    private string assetName;
+    private bool _isAssetbundleMode = false;
+    /// <summary>
+    /// 皮肤
+    /// </summary>
+    public bool IsAssetbundleMode 
+    {
+        get
+        {
+            return _isAssetbundleMode;
+        }
+    }
     /// <summary>
     /// 是否初始化
     /// </summary>
@@ -67,7 +80,16 @@ public class ViewBase : MonoBehaviour
         skin.transform.localPosition = Vector3.zero;//皮肤的位置不固定--
         skin.transform.localEulerAngles(Vector3.zero).localScale(1);
     }
-
+    protected void OnitSkinAssetBundle()
+    {
+         GameObject prefab = AssetBundleMgr.Instance.LoadAsset<GameObject>(abName, assetName);
+        if (prefab == null) return;
+        _skin = Instantiate(prefab);
+        _skin.transform.SetParent(transform);
+        _skin.GetComponent<RectTransform>().sizeDelta = GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta;
+        _skin.transform.localPosition = Vector3.zero;//皮肤的位置不固定--
+        _skin.transform.localEulerAngles(Vector3.zero).localScale(1);
+    }
     /// <summary>
     /// 初始化前
     /// </summary>
@@ -82,7 +104,14 @@ public class ViewBase : MonoBehaviour
         {
             OnInitFront();
             OnInitSkinFront();
-            OnInitSkin();
+            if (this.IsAssetbundleMode)
+            {
+                OnitSkinAssetBundle();
+            }
+            else
+            {
+                OnInitSkin();
+            }
         }
         Transform[] transforms = this.GetComponentsInChildren<Transform>(true);
         for (int i = 0, max = transforms.Length; i < max; i++)
@@ -123,9 +152,15 @@ public class ViewBase : MonoBehaviour
     /// <param name="path"></param>
     protected void SetMainSkinPath(string path)
     {
+        this._isAssetbundleMode = false;
         mainSkinPath = path;
     }
-
+    protected void SetAssetBundleSkin(string abName, string assetName)
+    {
+        this._isAssetbundleMode = true;
+        this.abName = abName;
+        this.assetName = assetName;
+    }
     /// <summary>
     /// 加载资源
     /// </summary>
@@ -133,6 +168,6 @@ public class ViewBase : MonoBehaviour
     /// <returns></returns>
     protected GameObject LoadSrc(string path)
     {
-        return ResourceMgr.GetInstance.CreateGameObject(path, false);
+        return ResourceMgr.Instance.CreateGameObject(path, false);
     }
 }

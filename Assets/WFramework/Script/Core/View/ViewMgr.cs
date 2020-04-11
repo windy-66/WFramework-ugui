@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ViewMgr : MonoBehaviour
 {
-    private static ViewMgr mInstance;
+    private static ViewMgr _instance; 
 
     private SceneType CurrentSceneType = SceneType.None;
 
@@ -16,15 +16,15 @@ public class ViewMgr : MonoBehaviour
     /// 获取资源加载实例
     /// </summary>
     /// <returns></returns>
-    public static ViewMgr GetInstance
+    public static ViewMgr Instance
     {
         get
         {
-            if (mInstance == null)
+            if (_instance == null)
             {
-                mInstance = new GameObject("_ViewMgr").AddComponent<ViewMgr>();
+                _instance = new GameObject("_ViewMgr").AddComponent<ViewMgr>();
             }
-            return mInstance;
+            return _instance;
         }
     }
 
@@ -39,6 +39,10 @@ public class ViewMgr : MonoBehaviour
         layer.transform.parent = scene.transform;
         layer.transform.localPosition(Vector3.zero).localEulerAngles(Vector3.zero).localScale(1);
         return layer;
+    }
+    public void SetScene(SceneType sceneType)
+    {
+        CurrentSceneType = sceneType;
     }
     public void SetScene(GameObject current , SceneType sceneType)
     {
@@ -63,7 +67,7 @@ public class ViewMgr : MonoBehaviour
 
     public void SetLayer(GameObject current, LayerType layerType)  
     {
-        Transform cuurentSceneTr = SceneMgr.GetInstance.scenes[CurrentSceneType].transform;
+        Transform cuurentSceneTr = SceneMgr.Instance.scenes[CurrentSceneType].transform;
         Transform layerParent = cuurentSceneTr.Find(layerType.ToString());
         current.transform.parent = layerParent;
         current.transform.localPosition(Vector3.zero).localEulerAngles(Vector3.zero).localScale(1);
@@ -89,9 +93,9 @@ public class ViewMgr : MonoBehaviour
 public enum LayerType
 {
     /// <summary>弹框</summary>
-    Panel = 200,
+    Panel = 100,
     /// <summary>提示</summary>
-    Tips = 400,
+    Tips = 200,
     /// <summary>公告层</summary>
-    Notice = 600,
+    Notice = 300,
 }

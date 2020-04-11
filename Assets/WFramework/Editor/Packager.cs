@@ -10,23 +10,6 @@ public class Packager {
     static List<string> files = new List<string>();
     static List<AssetBundleBuild> maps = new List<AssetBundleBuild>();
 
-    ///-----------------------------------------------------------
-    static string[] exts = { ".txt", ".xml", ".lua", ".assetbundle", ".json" };
-    static bool CanCopy(string ext) {   //能不能复制
-        foreach (string e in exts) {
-            if (ext.Equals(e)) return true;
-        } 
-        return false;
-    }
-
-    /// <summary>
-    /// 载入素材
-    /// </summary>
-    static UnityEngine.Object LoadAsset(string file) {
-        if (file.EndsWith(".lua")) file += ".txt";
-        return AssetDatabase.LoadMainAssetAtPath("Assets/WFramework/Examples/Builds/" + file);
-    }
-
     [MenuItem("WFramework/Build iPhone Resource", false, 100)]
     public static void BuildiPhoneResource() {
         BuildTarget target = BuildTarget.iOS;
@@ -98,7 +81,7 @@ public class Packager {
         AddBuildMap("shared_asset" + AppConst.ExtName, "*.png", "Assets/WFramework/Examples/Textures/Shared");
     }
 
-
+    [MenuItem("WFramework/Build files.txt", false, 103)]
     static void BuildFileIndex() {
         string resPath = AppDataPath + "/StreamingAssets/";
         ///----------------------创建文件列表-----------------------
@@ -145,11 +128,4 @@ public class Packager {
             Recursive(dir);
         }
     }
-
-    static void UpdateProgress(int progress, int progressMax, string desc) {
-        string title = "Processing...[" + progress + " - " + progressMax + "]";
-        float value = (float)progress / (float)progressMax;
-        EditorUtility.DisplayProgressBar(title, desc, value);
-    }
-
 }
