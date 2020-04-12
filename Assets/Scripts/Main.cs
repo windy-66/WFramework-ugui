@@ -10,10 +10,9 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (AppConst.AssetbundleMode)
+        if (AppConst.UpdateMode)
         {
-            AssetBundleMgr.Instance.Initialize();
-            SceneMgr.Instance.SwitchingScene(SceneType.LoginScene);
+            SceneMgr.Instance.SwitchingScene(SceneType.UpdateScene);
         }
         else
         {      

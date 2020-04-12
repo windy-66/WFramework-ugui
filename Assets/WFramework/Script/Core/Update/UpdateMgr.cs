@@ -10,7 +10,7 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
     private bool initialize = false;
 
     private List<string> downloadFiles = new List<string>();
-
+    private Dictionary<string, string> todownloadFiles  = new Dictionary<string, string>();
     /// <summary>
     /// 初始化游戏管理器
     /// </summary>
@@ -38,25 +38,27 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
          File.Exists(Util.DataPath + "files.txt");
         if (isExists || AppConst.DebugMode)
         {
-            StartCoroutine(OnUpdateResource());
+            StartCoroutine(OnCheckUpdate());
             return;   //文件已经解压过了，自己可添加检查文件列表逻辑
         }
         StartCoroutine(OnExtractResource());    //启动释放协成 
     }
-
     /// <summary>
-    /// 启动更新下载，这里只是个思路演示，此处可启动线程下载更新
+    /// 检测对比文件是否要更新
     /// </summary>
-    IEnumerator OnUpdateResource()
+    IEnumerator OnCheckUpdate()
     {
         if (!AppConst.UpdateMode)
         {
-            OnResourceInited();
+            //ResManager.initialize(Facade.m_GameManager.OnResourceInited);
             yield break;
         }
+        todownloadFiles.Clear();
+
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_CHECK, "开始检查更新"), this);
+
         string dataPath = Util.DataPath;  //数据目录
         string url = AppConst.WebUrl;
-        string message = string.Empty;
         string random = DateTime.Now.ToString("yyyymmddhhmmss");
         string listUrl = url + "files.txt?v=" + random;
         Debug.LogWarning("LoadUpdate---->>>" + listUrl);
@@ -64,14 +66,16 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
         WWW www = new WWW(listUrl); yield return www;
         if (www.error != null)
         {
-            OnUpdateFailed(string.Empty);
+            string message = "下载版本信息失败!>files.txt";
+            CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_CHECK, "下载版本信息失败!>files.txt"), this);
             yield break;
         }
         if (!Directory.Exists(dataPath))
         {
             Directory.CreateDirectory(dataPath);
         }
-        File.WriteAllBytes(dataPath + "files.txt", www.bytes);
+         File.WriteAllBytes(dataPath + "files.txt", www.bytes);
+
         string filesText = www.text;
         string[] files = filesText.Split('\n');
 
@@ -86,7 +90,7 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
             {
                 Directory.CreateDirectory(path);
             }
-            string fileUrl = url + f + "?v=" + random;
+            string fileUrl = url + keyValue[0] + "?v=" + random;
             bool canUpdate = !File.Exists(localfile);
             if (!canUpdate)
             {
@@ -95,31 +99,44 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
                 canUpdate = !remoteMd5.Equals(localMd5);
                 if (canUpdate) File.Delete(localfile);
             }
+            //本地缺少文件
             if (canUpdate)
-            {   //本地缺少文件
-                Debug.Log(fileUrl);
-                message = "downloading>>" + fileUrl;
-
-                CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, message), this);
-
-                /*
-                www = new WWW(fileUrl); yield return www;
-                if (www.error != null) {
-                    OnUpdateFailed(path);   //
-                    yield break;
-                }
-                File.WriteAllBytes(localfile, www.bytes);
-                 */
-                //这里都是资源文件，用线程下载
-                BeginDownload(fileUrl, localfile);
-                while (!(IsDownOK(localfile))) { yield return new WaitForEndOfFrame(); }
+            {
+                todownloadFiles[fileUrl] = localfile;
             }
         }
         yield return new WaitForEndOfFrame();
+        // "检查更新完成!!"
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_CHECK, "检查更新结束"), this);
+        // 对比完成 是否去下载
+        if (todownloadFiles.Count > 0)
+        {
+            StartCoroutine(OnUpdateResource());
+        }
+        else
+        {
+            OnResourceInited();
+        }
+    }
+    /// <summary>
+    /// 启动更新下载，这里只是个思路演示，此处可启动线程下载更新
+    /// </summary>
+    IEnumerator OnUpdateResource()
+    {
+        downloadFiles.Clear();
 
-        message = "更新完成!!";
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, "开始更新下载"), this);
 
-        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_FINISH, message), this);
+        foreach(KeyValuePair<string,string> kv in todownloadFiles)
+        {
+            //这里都是资源文件，用线程下载
+            BeginDownload(kv.Key, kv.Value);
+            while (!(IsDownOK(kv.Value))) { yield return new WaitForEndOfFrame(); }
+        }
+       
+        yield return new WaitForEndOfFrame();
+       
+        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, "下载更新结束"), this);
         OnResourceInited();
     }
 
@@ -167,6 +184,12 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
                 break;
             case NotiConst.UPDATE_DOWNLOAD: //下载一个完成
                 downloadFiles.Add(data.evParam.ToString());
+                float progress =  downloadFiles.Count * 1.00f / todownloadFiles.Count;
+                CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_PROGRESS, progress), this);
+                break;
+            case NotiConst.UPDATE_PROGRESS: 
+                string  speed  = data.evParam.ToString();
+                CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_DONLOAD_SPEED, speed), this);
                 break;
         }
     }
@@ -223,7 +246,7 @@ public class UpdateMgr : SingletonUnity<UpdateMgr>
             message = "正在解包文件:>" + fs[0];
             Debug.Log("正在解包文件:>" + infile);
 
-            CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, message), this);
+            CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, "正在解包文件"), this);
 
             string dir = Path.GetDirectoryName(outfile);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);

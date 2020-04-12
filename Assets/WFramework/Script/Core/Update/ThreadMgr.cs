@@ -72,7 +72,6 @@ public class ThreadMgr : SingletonUnity<ThreadMgr>
     /// <param name="data"></param>
     private void OnSyncEvent(NotiData data)
     {
-        CEventDispatcher.Instance.dispatchEvent(new CEvent(CEventName.UPDATE_MESSAGE, data), this);
         if (this.func != null) func(data);
     }
     // Update is called once per frame
@@ -112,6 +111,7 @@ public class ThreadMgr : SingletonUnity<ThreadMgr>
         string url = evParams[0].ToString();
         currDownFile = evParams[1].ToString();
 
+    
         using (WebClient client = new WebClient())
         {
             sw.Start();
@@ -130,13 +130,18 @@ public class ThreadMgr : SingletonUnity<ThreadMgr>
         //float value = (float)e.ProgressPercentage / 100f;
 
         string value = string.Format("{0} kb/s", (e.BytesReceived / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"));
-        NotiData data = new NotiData(NotiConst.UPDATE_PROGRESS, value);
-        if (m_SyncEvent != null) m_SyncEvent(data);
+              
+    
 
         if(e.ProgressPercentage == 100 && e.BytesReceived == e.TotalBytesToReceive)
         {
             sw.Reset();
-            data = new NotiData(NotiConst.UPDATE_DOWNLOAD, currDownFile);
+            NotiData data = new NotiData(NotiConst.UPDATE_DOWNLOAD, currDownFile);
+            if (m_SyncEvent != null) m_SyncEvent(data);
+        }
+        else
+        {
+            NotiData data = new NotiData(NotiConst.UPDATE_PROGRESS, value);
             if (m_SyncEvent != null) m_SyncEvent(data);
         }
     }

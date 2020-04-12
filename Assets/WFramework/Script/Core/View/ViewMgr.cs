@@ -92,10 +92,7 @@ public class ViewMgr : MonoBehaviour
 /// </summary>
 public enum LayerType
 {
-    /// <summary>弹框</summary>
     Panel = 100,
-    /// <summary>提示</summary>
     Tips = 200,
-    /// <summary>公告层</summary>
-    Notice = 300,
+
 }
